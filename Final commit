@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <title>Particle System</title>
+ <meta charset="utf-8">
+ <style>
+canvas {
+ border: 1px solid black;;
+}
+</style>
+ <script>
+ var canvas;
+ var context;
+ var particles;
+ var timer;
+ var timer2;
+ 
+ function makeParticles() {
+	//create an array of particles for our animation
+	particles = [];
+	for(var i = 0; i < 10; i++)
+	{
+		particles.push(new Particle());
+	}
+	
+ }
+ function degreesToRadians(degrees) {
+	 //converts from degrees to radians and returns
+	 return (degrees * Math.PI)/180;
+ }
+ function Particle()
+ {
+	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+	 this.x = Math.random()*canvas.width;
+	 this.y = (0)*canvas.height;
+	 this.vx = (.5)*10-5;
+	 this.vy = (1)*10-5;
+	 var colors = ["#028ad8", "#02d8bc", "#5802d8", "#0217d8", "#010635", "#350129", "#00300d", "#00300d", "#048c41"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+	 this.radius = 30;
+	 this.random = Math.floor(Math.random()*5);
+	 
+ }
+    
+
+//random # generator between 0 and 4 (*4) if 1, circles, if 2 squ, etc, put within the for loop for generating particles
+
+ function moveParticles() {
+	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+	 context.globalCompositeOperation = "source-over";
+	  var grd = context.createLinearGradient(0, 0, 0, 300);
+      grd.addColorStop(0, "rgb(159, 189, 228)");
+      grd.addColorStop(1, "rgb(0, 2, 21)"); 
+	 context.fillStyle = grd;
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+	 context.globalCompositeOperation = "lighter";
+	  context.font = "30px Arial";
+	     context.fillText("Shape Party!", canvas.width/2, canvas.height/2);
+	     context.fillStyle = "black";
+	     context.textAlign = "center";
+	 for(var i = 0; i < particles.length; i++)
+	 {
+		 var p = particles[i];
+		 if (p.random == 1){
+		 
+		 context.beginPath();
+		 context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+		 context.fillStyle = p.color;
+		 context.fill();
+		 p.x += p.vx;
+		 p.y += p.vy;
+		 if(p.x < -50) p.x = canvas.width+50;
+		 if(p.y < -50) p.y = canvas.height+50;
+		 if(p.x > canvas.width+30) p.x = -50;
+		 if(p.y > canvas.height+20) p.y = -50;
+		 }
+		 else if (p.random == 2) {
+		 context.beginPath();
+		 context.rect(p.x, p.y, 50, 50);
+		 context.fillStyle = p.color;
+		 context.fill();
+		 p.x += p.vx;
+		 p.y += p.vy;
+		 }
+		 else if (p.random == 3) {
+		    context.beginPath();
+			context.moveTo(75,40);
+			context.bezierCurveTo(75,37,70,25,50,25);
+			context.bezierCurveTo(20,25,20,62.5,20,62.5);
+			context.bezierCurveTo(20,80,40,102,75,120);
+			context.bezierCurveTo(110,102,130,80,130,62.5);
+			context.bezierCurveTo(130,62.5,130,25,100,25);
+			context.bezierCurveTo(85,25,75,37,75,40);
+			context.fill();	
+			p.x += p.vx;
+			p.y += p.vy;
+		 }
+		 else if (p.random == 4) {
+		 context.beginPath();
+		 context.moveTo(450, 350);
+		 context.lineTo(500, 390);
+		 context.lineTo(400, 390);
+		 context.fill();
+		 p.x += p.vx;
+		 p.y += p.vy;
+		 } 
+		 
+    }
+    
+ } 
+
+
+ window.onload = function() {
+	 canvas = document.getElementById('canvas');
+	 context = canvas.getContext('2d');
+	 makeParticles();
+	 timer = setInterval(moveParticles, 100);
+	 timer2 = setInterval(makeParticles, 8500);
+	 
+ }
+</script>
+</head>
+<body>
+
+	<canvas id="canvas" width="500" height="400"></canvas>
+</body>
+</html>
